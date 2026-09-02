@@ -50,3 +50,53 @@ jobs:
 
       - name: Lint Doctrine entities
         run: symfony console doctrine:schema:validate --skip-sync -vvv --no-interaction
+
+      - name: Build assets from asset mapper
+        run: |
+          symfony console assets:install --symlink --relative
+          symfony console asset-mapper:build
+
+      - name: Upload production dependencies and assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: production-files
+          path: |
+            vendor
+            assets/vendor
+            public/assets
+            public/bundles
+          if-no-files-found: error
+
+  update-branches-production:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download production dependencies and assets
+        uses: actions/download-artifact@v4
+        with:
+          name: production-files
+
+      - name: Publish production branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f vendor
+          for path in assets/vendor public/assets public/bundles; do
+            if [ -e "$path" ]; then
+              git add -f "$path"
+            fi
+          done
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No production changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: update production branch"
+          git push origin HEAD:production
