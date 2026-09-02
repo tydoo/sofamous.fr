@@ -62,10 +62,11 @@ jobs:
         with:
           name: production-files
           path: |
-            vendor
-            assets/vendor
-            public/assets
-            public/bundles
+            .
+            !.git
+            !.git/**
+            !var/cache
+            !var/cache/**
           if-no-files-found: error
 
   update-branches-production:
@@ -80,7 +81,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download production dependencies and assets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: production-files
 
@@ -88,13 +89,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f vendor
-          for path in assets/vendor public/assets public/bundles; do
-            if [ -e "$path" ]; then
-              git add -f "$path"
-            fi
-          done
-          git add -u
+          git add -A -f .
           if git diff --cached --quiet; then
             echo "No production changes to commit."
             exit 0
