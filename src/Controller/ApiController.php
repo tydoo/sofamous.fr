@@ -3,20 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\EmailTellDevelopper;
-use App\Repository\EmailTellDevelopperRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api', name: 'api.')]
 final class ApiController extends AbstractController {
 
     public function __construct(
-        private readonly ValidatorInterface $emailValidator,
         private readonly EntityManagerInterface $em,
     ) {
     }
@@ -26,7 +23,7 @@ final class ApiController extends AbstractController {
         return $this->render('swagger-ui.html.twig');
     }
 
-    public function returnErrorResponse(string $message, ?int $statusCode = Response::HTTP_BAD_REQUEST): JsonResponse {
+    private function returnErrorResponse(string $message, ?int $statusCode = Response::HTTP_BAD_REQUEST): JsonResponse {
         return new JsonResponse([
             'code' => $statusCode,
             'error' => $message
