@@ -19,7 +19,8 @@ const Home = {
                 form.reset();
                 form.classList.add('hidden');
 
-                if (response.status !== 201) {
+                if (
+                    response.status !== 201 && response.status !== 200) {
                     document.getElementById('notify-message-error').classList.remove('hidden');
                 } else {
                     document.getElementById('notify-message-success').classList.remove('hidden');
