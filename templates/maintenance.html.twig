@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{% trans from 'global' %}Coming soon{% endtrans %}
+{% endblock %}
+
+{% trans_default_domain 'home' %}
+
+{% block body %}
+	<main class="relative min-h-screen bg-base-200 px-5 py-10 text-base-content sm:px-8">
+		<div class="absolute top-4 right-4">
+			<button class="btn btn-ghost btn-sm" popovertarget="popover-1" style="anchor-name:--anchor-1">
+				{% trans from 'global' %}language_name{% endtrans %}
+				<i class="fa-solid fa-chevron-down ml-1"></i>
+			</button>
+			<ul class="dropdown menu w-52 rounded-box bg-base-100 shadow-sm" popover id="popover-1" style="position-anchor:--anchor-1">
+				<li>
+					<a href="/fr" data-turbo-prefetch="false">Français</a>
+				</li>
+				<li>
+					<a href="/en" data-turbo-prefetch="false">English</a>
+				</li>
+			</ul>
+			<button class="btn btn-ghost btn-sm" onclick="toolbox.showModal()">
+				<i class="fa-regular fa-toolbox fa-sm"></i>Toolbox</button>
+			{% include 'modals/toolbox.html.twig' %}
+		</div>
+		<div class="mx-auto flex min-h-[calc(100vh-5rem)] max-w-2xl items-center justify-center">
+			<div class="flex flex-col items-center text-center">
+				<a href="{{ path('home.home') }}" data-turbo-prefetch="false" class="brand-logo select-none p-4" aria-label="Go back home">
+					<img class="brand-logo__image h-auto w-64" data-logo-light="{{ asset('images/logo-light.svg') }}" data-logo-dark="{{ asset('images/logo-dark.svg') }}" alt="Logo">
+				</a>
+
+				<div class="mt-8 mb-12 text-[10px] font-medium uppercase tracking-[0.35em] text-base-content/60">2027
+					<i class="fa-solid fa-solid fa-circle mx-2"></i>
+					{% trans %}new version{% endtrans %}
+				</div>
+
+				<p onclick="this.remove(); document.getElementById('notify-form').classList.remove('hidden');" class="text-base-content/60 text-sm cursor-pointer underline">
+					{% trans %}tell developer{% endtrans %}
+				</p>
+
+				<form method="post" class="hidden" id="notify-form">
+					<div class="flex flex-col gap-3 sm:flex-row sm:justify-center sm:items-center">
+						<input class="input input-sm input-bordered w-auto" type="email" name="email" placeholder="Email address" autocomplete="email" required>
+						<button onclick="Home.tellDeveloper(this.form.email.value);" class="btn btn-sm btn-neutral" type="submit">Notify me</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</main>
+{% endblock %}

@@ -1,0 +1,56 @@
+services:
+  database:
+    container_name: sofamous_database
+    image: "mariadb:11.8.6"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sofamous
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  mailer:
+    container_name: sofamous_mailer
+    image: axllent/mailpit
+    ports: [1025, 8025]
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+  minio:
+    image: "minio/minio"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      APP_SOFAMOUS_ACCESS_KEY: DCRrfBkgU462jbigwIHN
+      APP_SOFAMOUS_SECRET_KEY: w53ZKGD3TkQFJyPEOSpU7EWMXK0Rh4cyC8wD0a82
+    volumes:
+      - "minio:/data/minio"
+    command: server /data/minio --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        i=1
+        while [ $$i -le 30 ]; do
+            if /usr/bin/mc --json alias set minio http://minio:9000 minioadmin minioadmin >/dev/null 2>&1; then
+                break
+            fi
+            echo "Waiting for minio... ($$i/30)"
+            sleep 2
+            i=$$(($$i + 1))
+        done
+        /usr/bin/mc mb minio/sofamous
+        exit 0
+volumes:
+  minio:
+    driver: local
+  mariadb:
+    driver: local

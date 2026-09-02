@@ -1,0 +1,78 @@
+openapi: 3.2.0
+info:
+  title: Api of sofamous.fr
+  description: |-
+    This is official API documentation for sofamous.fr, providing detailed information about the available endpoints, request/response formats, and authentication methods. It serves as a comprehensive guide for developers to integrate with the sofamous.fr platform effectively.
+  contact:
+    email: contact@sofamous.fr
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Production server
+paths:
+  /email:
+    post:
+      summary: Add a new email to tell the developper
+      description: Add a new email to tell the developper
+      operationId: addEmail
+      tags:
+        - Global
+      requestBody:
+        description: Create a new email in the store
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The email address to be added.
+              required:
+                - email
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Email:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The unique identifier of the email.
+        email:
+          type: string
+          format: email
+          description: The email address to be added.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the email was created.
+      example:
+        id: 1
+        email: "user@example.com"
+        createdAt: "2024-06-01T12:00:00Z"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
