@@ -54,6 +54,7 @@ jobs:
       - name: Build assets
         run: |
           symfony console assets:install
+          symfony console tailwind:build --minify --quiet --no-interaction
           symfony console asset-map:compile
 
       - name: Upload production dependencies and assets
