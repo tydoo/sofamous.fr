@@ -32,6 +32,12 @@ paths:
                 - email
         required: true
       responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
         '201':
           description: Successful operation
           content:

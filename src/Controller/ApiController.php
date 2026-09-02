@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\EmailTellDevelopper;
+use App\Repository\EmailTellDevelopperRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,16 +33,23 @@ final class ApiController extends AbstractController {
 
     #[Route('/v1/email', name: 'email.post', methods: ['POST'])]
     public function postEmail(
-        Request $request
+        Request $request,
+        EmailTellDevelopperRepository $emailTellDevelopperRepository
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? null;
+        $emailFromRequest = $data['email'] ?? null;
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($emailFromRequest, FILTER_VALIDATE_EMAIL)) {
             return $this->returnErrorResponse('Invalid email address', Response::HTTP_BAD_REQUEST);
         }
 
-        $email = new EmailTellDevelopper($email);
+        if ($email = $emailTellDevelopperRepository->findOneBy(['email' => $emailFromRequest])) {
+            return new JsonResponse(
+                $email->toArray()
+            );
+        }
+
+        $email = new EmailTellDevelopper($emailFromRequest);
 
         try {
             $this->em->persist($email);

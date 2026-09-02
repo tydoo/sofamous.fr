@@ -1,2 +1,4 @@
 new version: nouvelle version
 tell developer: Cliquez ici pour dire au développeur de se dépêcher !
+alert_email_tell_developer_success: Merci pour votre intérêt, vous serez notifié lorsque la nouvelle version sera disponible.
+alert_email_tell_developer_error: Une erreur est survenue lors de l'envoi de votre demande, veuillez réessayer plus tard.
