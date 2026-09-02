@@ -51,9 +51,9 @@ jobs:
       - name: Lint Doctrine entities
         run: symfony console doctrine:schema:validate --skip-sync -vvv --no-interaction
 
-      - name: Build assets from asset mapper
+      - name: Build assets
         run: |
-          symfony console assets:install --symlink --relative
+          symfony console assets:install
           symfony console asset-mapper:build
 
       - name: Upload production dependencies and assets
