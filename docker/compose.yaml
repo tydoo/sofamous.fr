@@ -6,3 +6,7 @@ services:
     volumes:
       - /etc/ssl/certs/sofamous.fr.pem:/etc/ssl/certs/sofamous.fr.pem:ro
       - /etc/ssl/private/sofamous.fr.key:/etc/ssl/private/sofamous.fr.key:ro
+    command:
+      - sh
+      - -c
+      - "php bin/console doctrine:migrations:migrate --no-interaction --env=prod && exec frankenphp run --config /etc/caddy/Caddyfile --adapter caddyfile"
