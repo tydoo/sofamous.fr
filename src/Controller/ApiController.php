@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api', name: 'api.')]
@@ -16,6 +18,7 @@ final class ApiController extends AbstractController {
 
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly MailerInterface $mailer
     ) {
     }
 
@@ -51,9 +54,17 @@ final class ApiController extends AbstractController {
 
         $email = new EmailTellDevelopper($emailFromRequest);
 
+        $emailToSend = new Email();
+        $emailToSend
+            ->to('tboyer@sofamous.fr')
+            ->subject('New email submission')
+            ->html('<p>A new email has been submitted.</p>');
+
         try {
             $this->em->persist($email);
             $this->em->flush();
+
+            $this->mailer->send($emailToSend);
 
             return new JsonResponse(
                 $email->toArray(),
