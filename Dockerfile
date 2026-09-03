@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:php8.5-bookworm AS app
+FROM dunglas/frankenphp:php8.5-trixie AS app
 
 RUN install-php-extensions intl pdo_mysql opcache
 
