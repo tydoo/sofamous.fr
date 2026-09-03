@@ -1,6 +1,6 @@
 import Logo from './logo.js';
 
-export default {
+const Toolbox = {
     init: function () {
         document.querySelectorAll('[data-theme-step]').forEach((button) => {
             button.addEventListener('click', (e) => {
@@ -64,3 +64,6 @@ export default {
         this.setTheme(theme);
     }
 }
+
+globalThis.Toolbox = Toolbox;
+export default Toolbox;

@@ -45,6 +45,7 @@ import './fontawesome/css/whiteboard-semibold.min.css';
 
 import Logo from './logo.js';
 import Toolbox from './toolbox.js';
+import Home from './home.js';
 
 Toolbox.setTheme(localStorage.getItem('theme') || 'corporate');
 document.addEventListener('turbo:load', () => {
