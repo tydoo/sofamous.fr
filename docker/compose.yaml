@@ -1,0 +1,8 @@
+services:
+  sofamous:
+    image: ghcr.io/tydoo/sofamous.fr:latest
+    ports:
+      - "443:443"
+    volumes:
+      - /etc/ssl/certs/sofamous.fr.pem:/etc/ssl/certs/sofamous.fr.pem:ro
+      - /etc/ssl/private/sofamous.fr.key:/etc/ssl/private/sofamous.fr.key:ro

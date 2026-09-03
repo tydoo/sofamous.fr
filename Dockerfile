@@ -22,5 +22,5 @@ RUN export APP_SECRET=build-only-secret \
 
 COPY docker/Caddyfile /etc/caddy/Caddyfile
 
-EXPOSE 80
+EXPOSE 443
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

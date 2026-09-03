@@ -1,5 +1,6 @@
-:80 {
+:443 {
     root * /app/public
     encode zstd gzip
+    tls /etc/ssl/certs/sofamous.fr.pem /etc/ssl/private/sofamous.fr.key
     php_server
 }
