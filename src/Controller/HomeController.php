@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Service\MailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController {
@@ -15,7 +17,10 @@ final class HomeController extends AbstractController {
     }
 
     #[Route('/home', name: 'home.home')]
-    public function home(): Response {
+    public function home(
+        MailService $mailService
+    ): Response {
+        $mailService->test();
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
