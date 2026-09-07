@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DatabaseToolSources">
+    <data-source name="localhost" uuid="993b9652-cee5-4c5c-b4b2-9ee07b71a20e" type="MARIADB">
+      <base-info connect-type="DB_DEFAULT" product="MariaDB" version="11.8.6-MariaDB-ubu2404" major-version="11" minor-version="8" jdbc-name="MariaDB Connector/J" jdbc-version="3.5.7" jdbc-major-version="3" jdbc-minor-version="5" />
+      <user-name>root</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="mysql" operator="@" />
+            <name qname="performance_schema" operator="@" />
+            <name qname="sofamous" operator="@" />
+            <name qname="sys" operator="@" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+      <url>jdbc:mariadb://localhost:3306/</url>
+      <remarks />
+      <vm-options />
+      <driver-info id="MariaDB" />
+      <ssh-properties enabled="false" />
+      <jdbc-additional-properties>
+        <property name="characterSetResults" value="utf8" />
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="characterEncoding" value="utf8" />
+        <property name="usePipelineAuth" value="false" />
+        <property name="yearIsDateType" value="false" />
+      </jdbc-additional-properties>
+      <ssl-config enabled="false">
+        <uuid />
+        <caFile />
+        <clientCertificateFile />
+        <clientKeyFile />
+        <sslMode>REQUIRE</sslMode>
+      </ssl-config>
+    </data-source>
+  </component>
+</project>
