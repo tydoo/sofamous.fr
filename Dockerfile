@@ -1,8 +1,8 @@
 FROM dunglas/frankenphp:php8.5-trixie AS app
 
-RUN install-php-extensions intl pdo_mysql opcache zip \
+RUN install-php-extensions intl pdo_mysql opcache zip pcntl \
     && apt-get update \
-    && apt-get install -y --no-install-recommends unzip \
+    && apt-get install -y --no-install-recommends unzip supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -21,6 +21,7 @@ RUN export APP_SECRET=build-only-secret \
     && php bin/console asset-map:compile
 
 COPY docker/Caddyfile /etc/caddy/Caddyfile
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 
 EXPOSE 443
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
