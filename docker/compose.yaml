@@ -1,9 +1,8 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 services:
   sofamous:
-    image: ghcr.io/tydoo/sofamous.fr:${APP_VERSION:-latest}
+    image: ghcr.io/tydoo/sofamous.fr:latest
     restart: unless-stopped
-    environment:
-      APP_VERSION: ${APP_VERSION:-latest}
     ports:
       - "443:443"
     stop_grace_period: 1h
