@@ -1,6 +1,8 @@
 services:
   sofamous:
-    image: ghcr.io/tydoo/sofamous.fr:latest
+    image: ghcr.io/tydoo/sofamous.fr:${APP_VERSION:-latest}
+    environment:
+      APP_VERSION: ${APP_VERSION:-latest}
     ports:
       - "443:443"
     volumes:
