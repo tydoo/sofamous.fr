@@ -1,7 +1,7 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: '%env(resolve:MAILER_DSN)%'
         envelope:
-            sender: 'noreply@sofamous.fr'
+            sender: 'no-reply@sofamous.fr'
         headers:
-            From: 'Sofamous <noreply@sofamous.fr>'
+            From: 'Sofamous <no-reply@sofamous.fr>'

@@ -9,13 +9,13 @@ services:
       - mariadb:/var/lib/mysql
     ports:
       - "3306:3306"
-  mailer:
-    container_name: sofamous_mailer
-    image: axllent/mailpit
-    ports: [1025, 8025]
-    environment:
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+#  mailer:
+#    container_name: sofamous_mailer
+#    image: axllent/mailpit
+#    ports: [1025, 8025]
+#    environment:
+#      MP_SMTP_AUTH_ACCEPT_ANY: 1
+#      MP_SMTP_AUTH_ALLOW_INSECURE: 1
   minio:
     image: "minio/minio"
     environment:
