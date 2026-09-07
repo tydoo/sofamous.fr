@@ -1,0 +1,8 @@
+{% extends 'emails/_default.html.twig' %}
+
+{% block content %}
+
+    <h1>{{ subject ?? 'subject not provided' }}</h1>
+
+    {{ (content ?? 'content not provided')| raw }}
+{% endblock %}

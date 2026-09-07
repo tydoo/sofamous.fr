@@ -17,10 +17,7 @@ final class HomeController extends AbstractController {
     }
 
     #[Route('/home', name: 'home.home')]
-    public function home(
-        MailService $mailService
-    ): Response {
-        $mailService->test();
+    public function home(): Response {
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
