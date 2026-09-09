@@ -2,7 +2,7 @@ FROM dunglas/frankenphp:php8.5-trixie AS app
 
 RUN install-php-extensions intl pdo_mysql opcache zip pcntl \
     && apt-get update \
-    && apt-get install -y --no-install-recommends unzip supervisor git \
+    && apt-get install -y --no-install-recommends unzip supervisor git openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
