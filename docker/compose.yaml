@@ -10,11 +10,7 @@ services:
       - /etc/ssl/certs/sofamous.fr.pem:/etc/ssl/certs/sofamous.fr.pem:ro
       - /etc/ssl/private/sofamous.fr.key:/etc/ssl/private/sofamous.fr.key:ro
       - ${HOME}/.ssh:/root/.ssh:ro
-      - known_hosts_data:/root/.ssh/known_hosts
     command:
       - sh
       - -c
-      - "echo \"Running APP_VERSION: ${APP_VERSION:-unknown}\" && mkdir -p config/secrets/prod && GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/root/.ssh/known_hosts' git clone --depth 1 git@github.com:tydoo/Decrypt-file-prod-sofamous.fr.git /tmp/decrypt-repo && cp /tmp/decrypt-repo/prod.decrypt.private.php config/secrets/prod/prod.decrypt.private.php && rm -rf /tmp/decrypt-repo && php bin/console doctrine:migrations:migrate --no-interaction --env=prod && exec supervisord -c /etc/supervisor/supervisord.conf"
-
-volumes:
-  known_hosts_data:
+      - "APP_VERSION_FROM_ENV_FILE=$$(sed -n 's/^APP_VERSION=//p' /app/.env | tail -n 1) && echo \"Running APP_VERSION: $$APP_VERSION_FROM_ENV_FILE\" && mkdir -p config/secrets/prod && GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' git clone --depth 1 git@github.com:tydoo/Decrypt-file-prod-sofamous.fr.git /tmp/decrypt-repo && cp /tmp/decrypt-repo/prod.decrypt.private.php config/secrets/prod/prod.decrypt.private.php && rm -rf /tmp/decrypt-repo && php bin/console doctrine:migrations:migrate --no-interaction --env=prod && exec supervisord -c /etc/supervisor/supervisord.conf"
