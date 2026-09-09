@@ -17,9 +17,15 @@ final class HomeController extends AbstractController {
     }
 
     #[Route('/home', name: 'home.home')]
-    public function home(): Response {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+    public function home(MailService $mailService): Response {
+        $mailService->sendEmail(
+            to: 'thomas@tydoo.fr',
+            subject: 'Hello from Symfony',
+            body: $this->renderView('emails/simple.html.twig', [
+                'subject' => 'Hello from Symfony',
+                'content' => 'This is a test email sent from the HomeController.'
+            ])
+        );
+        return $this->render($this->isGranted('IS_AUTHENTICATED_FULLY') ? 'home/logged.html.twig' : 'home/not-logged.html.twig');
     }
 }
