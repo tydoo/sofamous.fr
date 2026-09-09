@@ -14,7 +14,7 @@ services:
     command:
       - sh
       - -c
-      - "mkdir -p config/secrets/prod && GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/root/.ssh/known_hosts' git clone --depth 1 git@github.com:tydoo/Decrypt-file-prod-sofamous.fr.git /tmp/decrypt-repo && cp /tmp/decrypt-repo/prod.decrypt.private.php config/secrets/prod/prod.decrypt.private.php && rm -rf /tmp/decrypt-repo && php bin/console doctrine:migrations:migrate --no-interaction --env=prod && exec supervisord -c /etc/supervisor/supervisord.conf"
+      - "echo \"Running APP_VERSION: ${APP_VERSION:-unknown}\" && mkdir -p config/secrets/prod && GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/root/.ssh/known_hosts' git clone --depth 1 git@github.com:tydoo/Decrypt-file-prod-sofamous.fr.git /tmp/decrypt-repo && cp /tmp/decrypt-repo/prod.decrypt.private.php config/secrets/prod/prod.decrypt.private.php && rm -rf /tmp/decrypt-repo && php bin/console doctrine:migrations:migrate --no-interaction --env=prod && exec supervisord -c /etc/supervisor/supervisord.conf"
 
 volumes:
   known_hosts_data:
