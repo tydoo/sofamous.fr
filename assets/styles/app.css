@@ -50,3 +50,54 @@
         filter: none;
     }
 }
+
+/* Dynamic member-activity tooltips positioned over the world map: a small
+ * dot pinpoints the exact location, with a plain text bubble anchored just
+ * above it (connected by a little arrow) to avoid any ambiguity. */
+.world-feed-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 250ms ease;
+}
+
+.world-feed-item--show,
+.world-feed-item--leave {
+    opacity: 1;
+}
+
+.world-feed-item--leave {
+    opacity: 0;
+}
+
+.world-feed-item__dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent);
+}
+
+.world-feed-item__bubble {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.5rem);
+    transform: translate(-0.75rem, 0);
+}
+
+.world-feed-item__bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0.75rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: inherit;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+

@@ -4,21 +4,116 @@ export default () => {
         return;
     }
 
+    const resolveCssColor = (propertyName) => {
+        const candidates = [
+            document.documentElement,
+            document.body,
+            element,
+            ...(() => {
+                const parents = [];
+                let current = element.parentElement;
+
+                while (current) {
+                    parents.push(current);
+                    current = current.parentElement;
+                }
+
+                return parents;
+            })(),
+        ];
+
+        for (const candidate of candidates) {
+            if (!candidate) {
+                continue;
+            }
+
+            const value = window.getComputedStyle(candidate).getPropertyValue(propertyName).trim();
+            if (value) {
+                return value;
+            }
+        }
+
+        return '';
+    };
+
+    const readColorFromToken = (token) => {
+        if (!token) {
+            return '';
+        }
+
+        const normalized = String(token).trim();
+        if (!normalized) {
+            return '';
+        }
+
+        if (normalized.startsWith('--')) {
+            return resolveCssColor(normalized) || normalized;
+        }
+
+        return resolveCssColor(`--color-${normalized}`)
+            || resolveCssColor(normalized)
+            || normalized;
+    };
+
     const readBackgroundColor = () => {
-        const rootStyle = window.getComputedStyle(document.documentElement);
-        const rootColor = rootStyle.getPropertyValue('--color-base-100').trim()
-            || rootStyle.getPropertyValue('--color-base-200').trim();
+        const candidates = [
+            element,
+            ...(() => {
+                const parents = [];
+                let current = element.parentElement;
 
-        if (rootColor) {
-            return rootColor;
+                while (current) {
+                    parents.push(current);
+                    current = current.parentElement;
+                }
+
+                return parents;
+            })(),
+            document.body,
+            document.documentElement,
+        ];
+
+        for (const current of candidates) {
+            if (!current) {
+                continue;
+            }
+
+            const computed = window.getComputedStyle(current);
+            const backgroundColor = computed.backgroundColor;
+
+            if (backgroundColor && backgroundColor !== 'rgba(0, 0, 0, 0)' && backgroundColor !== 'transparent') {
+                return backgroundColor;
+            }
         }
 
-        const bodyColor = window.getComputedStyle(document.body).backgroundColor;
-        if (bodyColor && bodyColor !== 'rgba(0, 0, 0, 0)' && bodyColor !== 'transparent') {
-            return bodyColor;
+        return 'rgba(0, 0, 0, 0)';
+    };
+
+    const readLogoVarianceColor = () => {
+        const variance = (element.dataset.logoVariance || 'auto').trim();
+
+        if (variance === 'auto') {
+            return readBackgroundColor();
         }
 
-        return window.getComputedStyle(document.documentElement).backgroundColor;
+        return readColorFromToken(variance);
+    };
+
+    const chooseLogoForAutoBackground = () => {
+        const backgroundColor = readBackgroundColor();
+        const brightness = parseBrightness(backgroundColor);
+
+        return brightness >= 0.5
+            ? element.dataset.logoLight
+            : element.dataset.logoDark;
+    };
+
+    const chooseLogoForExplicitColor = (colorValue) => {
+        const brightness = parseBrightness(colorValue);
+
+        return brightness >= 0.5
+            ? element.dataset.logoDark
+            : element.dataset.logoLight;
     };
 
     const toLinearChannel = (channel) => {
@@ -104,7 +199,10 @@ export default () => {
         return 0.5;
     };
 
-    const brightness = parseBrightness(readBackgroundColor());
-    const logo = brightness < 0.5 ? element.dataset.logoDark : element.dataset.logoLight;
+    const variance = (element.dataset.logoVariance || 'auto').trim();
+    const logo = variance === 'auto'
+        ? chooseLogoForAutoBackground()
+        : chooseLogoForExplicitColor(readLogoVarianceColor());
+
     element.setAttribute('src', logo);
 };

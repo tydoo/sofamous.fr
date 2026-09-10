@@ -1,7 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue !{% endblock %}
+{% block title %}Welcome !{% endblock %}
 
 {% block body %}
-Not logged in
+
+    {% include 'home/not-logged/header.html.twig' %}
+
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+            <div
+                class="relative aspect-[360/235.92] bg-transparent text-base-content/15 w-full lg:w-3/5 shrink-0"
+                data-controller="world-map"
+                data-world-map-demo-value="true"
+            >
+                {% include 'components/_world_map.svg.twig' %}
+                <div class="pointer-events-none absolute inset-0" data-world-map-target="layer"></div>
+
+                <button type="button" class="btn btn-primary btn-lg rounded-full shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all normal-case gap-3 absolute bottom-2 right-2">
+                    <span>S'inscrire</span>
+                    <i class="fa-solid fa-arrow-right fa-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="w-full lg:w-2/5 flex flex-col gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {% set features = [
+                        {
+                            icon: 'fa-image-portrait',
+                            title: 'Que des vrais membres',
+                            description: 'No fake photo. Chaque profil est vérifié, pas de faux avatars ni de photos volées.',
+                            badge_class: 'bg-primary text-primary-content',
+                        },
+                        {
+                            icon: 'fa-key',
+                            title: 'Connexion en passkey',
+                            description: "Uniquement des passkeys, aucun mot de passe. Plus simple, plus sûr.",
+                            badge_class: 'bg-secondary text-secondary-content',
+                        },
+                        {
+                            icon: 'fa-lock',
+                            title: 'Tout est chiffré',
+                            description: 'Tes données et tes échanges sont chiffrés de bout en bout.',
+                            badge_class: 'bg-accent text-accent-content',
+                        },
+                        {
+                            icon: 'fa-people-group',
+                            title: 'Des clubs pour tes passions',
+                            description: 'Rejoins ou crée des clubs pour partager ce qui te fait vibrer.',
+                            badge_class: 'bg-info text-info-content',
+                        },
+                    ] %}
+                    {% for feature in features %}
+                        <div class="card bg-base-100 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-base-300">
+                            <div class="card-body items-center text-center">
+                                <div class="mask mask-squircle w-16 h-16 flex items-center justify-center text-2xl {{ feature.badge_class }}">
+                                    <i class="fa-regular {{ feature.icon }}" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="card-title text-base">{{ feature.title }}</h3>
+                                <p class="text-sm text-base-content/65">{{ feature.description }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
